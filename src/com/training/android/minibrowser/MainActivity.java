@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -18,11 +19,11 @@ import android.widget.EditText;
 import com.training.android.minibrowser.providers.MiniBookmarkProvider;
 
 public class MainActivity extends Activity {
-    private static ContentResolver mContRes;
-
     private Button mBtnOpenUrl;
     private EditText mEdtUrl;
     private WebView mWebView;
+    private static ContentResolver mContRes;
+    private static WebSettings mWebSet;
     private static final int MENU_SETTING = Menu.FIRST;
     private static final int MENU_ADD = Menu.FIRST + 1;
     private static final int MENU_BOOKMARK = Menu.FIRST + 2;
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        mWebView.getSettings().setJavaScriptEnabled(checkJS());
+        mWebSet.setJavaScriptEnabled(checkJS());
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -49,14 +50,22 @@ public class MainActivity extends Activity {
         mBtnOpenUrl = (Button) findViewById(R.id.btnOpenUrl);
         mEdtUrl = (EditText) findViewById(R.id.edtUrl);
         mWebView = (WebView) findViewById(R.id.webView);
+
+        mWebSet = mWebView.getSettings();
+        mWebView.setInitialScale(35);
+        mWebSet.setUseWideViewPort(true);
+        //mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+        mWebSet.setBuiltInZoomControls(true);
+        mWebSet.setDisplayZoomControls(false);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                mEdtUrl.setText(url);
                 view.loadUrl(url);
                 return true;
             }
         });
-        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebSet.setJavaScriptEnabled(true);
         mBtnOpenUrl.setOnClickListener(btnClickLisOpenUrl);
     }
 
@@ -90,7 +99,7 @@ public class MainActivity extends Activity {
                     ContentValues newRow = new ContentValues();
                     newRow.put("title", mWebView.getTitle());
                     newRow.put("URL", mWebView.getUrl());
-                    
+
                     /*
                      *   這裡的selection相當於SQL語法中的WHERE
                      */
@@ -98,10 +107,8 @@ public class MainActivity extends Activity {
                             null, null);
                     if (c.getCount() > 0) {
                         mContRes.update(MiniBookmarkProvider.CONTENT_URI, newRow, selection, null);
-                        // Log.d(TAG, "go update = "+c.getCount());
                     } else {
                         mContRes.insert(MiniBookmarkProvider.CONTENT_URI, newRow);
-                        // Log.d(TAG, "go insert = "+c.getCount());
                     }
                 }
                 break;
@@ -123,10 +130,10 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != 0) {
             String result = data.getExtras().getString("uri");
-            String uri = result.substring(result.indexOf("\n") + 5);
-            // Log.i(TAG, uri);
-            mEdtUrl.setText(uri);
-            mWebView.loadUrl(uri);
+            Log.d(TAG, "result = "+result);
+            //String uri = result.substring(result.indexOf("\n") + 5);
+            mEdtUrl.setText(result);
+            mWebView.loadUrl(result);
         }
     }
 }

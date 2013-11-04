@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
@@ -56,7 +55,6 @@ public class BookmarkActivity extends Activity {
 
         Cursor c = mContRes.query(MiniBookmarkProvider.CONTENT_URI, projection, null, null, null);
         // c.moveToFirst();
-        Log.d("Fuck", "c 0=" + c.getColumnName(0));
         // myAdapter = new SimpleCursorAdapter(this, R.layout.listview, c, new
         // String[]{"title", "URL"}, new int[]{R.id.title, R.id.url}, 0);
         if (myAdapter == null) {
@@ -88,7 +86,7 @@ public class BookmarkActivity extends Activity {
             // TODO Auto-generated method stub
             Intent intent = new Intent();
             TextView uri = (TextView) view.findViewById(R.id.url);
-            intent.putExtra("uri", "http" + uri.getText());
+            intent.putExtra("uri", uri.getText());
             BookmarkActivity.this.setResult(RESULT_OK, intent);
             finish();
         }
@@ -117,12 +115,17 @@ public class BookmarkActivity extends Activity {
                              * //myArrayAdapter.remove(selection);
                              * //myArrayAdapter.notifyDataSetChanged();
                              */
-                            mContRes.delete(MiniBookmarkProvider.CONTENT_URI, "_id=\""+ID+"\"", null);
-                            //Uri uri = Uri.withAppendedPath(MiniBookmarkProvider.CONTENT_URI, ID+"");
-                            //mContRes.delete(uri, null, null);
+                            mContRes.delete(MiniBookmarkProvider.CONTENT_URI, "_id=\"" + ID + "\"",
+                                    null);
+                            // Uri uri =
+                            // Uri.withAppendedPath(MiniBookmarkProvider.CONTENT_URI,
+                            // ID+"");
+                            // mContRes.delete(uri, null, null);
                             Log.d(TAG, "getActionBar()=" + getActionBar() + ", getTaskId()="
-                                    + getTaskId()+", getApplication()="+getApplication()+", vw.getId()="+vw.getId()+", id="+ID);
-                            Cursor c = mContRes.query(MiniBookmarkProvider.CONTENT_URI, null, null, null, null);
+                                    + getTaskId() + ", getApplication()=" + getApplication()
+                                    + ", vw.getId()=" + vw.getId() + ", id=" + ID);
+                            Cursor c = mContRes.query(MiniBookmarkProvider.CONTENT_URI, null, null,
+                                    null, null);
                             myAdapter.changeCursor(c);
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
