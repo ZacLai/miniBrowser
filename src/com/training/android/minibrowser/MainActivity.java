@@ -102,7 +102,6 @@ public class MainActivity extends Activity {
                     } else {
                         mContRes.insert(MiniBookmarkProvider.CONTENT_URI, newRow);
                         // Log.d(TAG, "go insert = "+c.getCount());
-                        //nononono
                     }
                 }
                 break;
