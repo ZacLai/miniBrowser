@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">miniBrowser</string>
+    <string name="action_settings">Settings</string>
+    <string name="url">URL</string>
+    <string name="btn_lab">Go</string>
+    <string name="prefragment">Preference Fragment</string>
+    <string name="bookmark">Bookmark List</string>
+
+</resources>
