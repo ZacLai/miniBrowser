@@ -129,11 +129,10 @@ public class MainActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != 0) {
-            String result = data.getExtras().getString("uri");
-            Log.d(TAG, "result = "+result);
-            //String uri = result.substring(result.indexOf("\n") + 5);
-            mEdtUrl.setText(result);
-            mWebView.loadUrl(result);
+            String url = data.getExtras().getString("url");
+            //Log.d(TAG, "url = "+url);
+            mEdtUrl.setText(url);
+            mWebView.loadUrl(url);
         }
     }
 }

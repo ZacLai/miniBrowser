@@ -94,7 +94,6 @@ public class MiniBookmarkProvider extends ContentProvider {
         //Log.d(TAG, "this is update!!!");
         // TODO Auto-generated method stub
         return mBookmarkDb.update(DB_TABLE, values, selection, selectionArgs);
-        //return 0;
     }
 
 }
