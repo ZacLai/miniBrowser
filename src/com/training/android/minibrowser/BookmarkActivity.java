@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 import com.training.android.minibrowser.providers.MiniBookmarkProvider;
 
 public class BookmarkActivity extends Activity {
-    private static String TAG = "BookmarkActivity";
+    //private static String TAG = "BookmarkActivity";
     private static ContentResolver mContRes;
     private SimpleCursorAdapter myAdapter = null;
 

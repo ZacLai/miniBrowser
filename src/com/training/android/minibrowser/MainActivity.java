@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     private WebView mWebView;
     private static ContentResolver mContRes;
     private static WebSettings mWebSet;
+    private static boolean mCheckClick;
     private static final int MENU_SETTING = Menu.FIRST;
     private static final int MENU_ADD = Menu.FIRST + 1;
     private static final int MENU_BOOKMARK = Menu.FIRST + 2;
@@ -54,25 +55,39 @@ public class MainActivity extends Activity {
         mWebSet = mWebView.getSettings();
         mWebView.setInitialScale(35);
         mWebSet.setUseWideViewPort(true);
-        //mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+        // mWebView.getSettings().setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
         mWebSet.setBuiltInZoomControls(true);
         mWebSet.setDisplayZoomControls(false);
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                mEdtUrl.setText(url);
                 view.loadUrl(url);
                 return true;
+            }
+
+            public void onLoadResource(WebView view, String url) {
+                mEdtUrl.setText(view.getTitle());
+                mCheckClick = true;
             }
         });
         mWebSet.setJavaScriptEnabled(true);
         mBtnOpenUrl.setOnClickListener(btnClickLisOpenUrl);
+        mEdtUrl.setOnClickListener(urlClickLisOpenUrl);
     }
 
     private Button.OnClickListener btnClickLisOpenUrl = new Button.OnClickListener() {
         public void onClick(View v) {
             Log.d(TAG, mEdtUrl.getText().toString() + " | JS: " + checkJS());
             mWebView.loadUrl(mEdtUrl.getText().toString());
+        }
+    };
+    private EditText.OnClickListener urlClickLisOpenUrl = new EditText.OnClickListener() {
+        public void onClick(View v) {
+            if (mCheckClick) {
+                mEdtUrl.setText(mWebView.getUrl());
+                mEdtUrl.setSelection(7, mWebView.getUrl().length());
+                mCheckClick = false;
+            }
         }
     };
 
@@ -101,7 +116,7 @@ public class MainActivity extends Activity {
                     newRow.put("URL", mWebView.getUrl());
 
                     /*
-                     *   這裡的selection相當於SQL語法中的WHERE
+                     * 這裡的selection相當於SQL語法中的WHERE
                      */
                     Cursor c = mContRes.query(MiniBookmarkProvider.CONTENT_URI, null, selection,
                             null, null);
@@ -130,8 +145,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != 0) {
             String url = data.getExtras().getString("url");
-            //Log.d(TAG, "url = "+url);
-            mEdtUrl.setText(url);
+            // Log.d(TAG, "url = "+url);
             mWebView.loadUrl(url);
         }
     }
